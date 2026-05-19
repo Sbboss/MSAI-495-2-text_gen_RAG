@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Local env
+.env
+
+# Data and artifacts
+data/
+artifacts/
+checkpoints/
+wandb/
+*.faiss
+*.npy
+*.npz
+
+# OS/editor noise
+.DS_Store
+.scripts/build_faiss_index.py
+.scripts/prepare_retrieval_corpus.py

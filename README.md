@@ -84,6 +84,38 @@ Primary evaluation compares base and RAG variants on factual technical QA qualit
 - **UI:** Streamlit
 - **Tracking / Checkpoints:** W&B, Orbax
 
+## Setup
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Data Pipeline
+
+Run the full retrieval data workflow:
+
+```bash
+# 1) Download and store raw datasets
+python3 scripts/download_datasets.py
+
+# 2) Build chunked retrieval corpus JSONL
+python3 scripts/prepare_retrieval_corpus.py
+
+# 3) Build FAISS index + metadata
+python3 scripts/build_faiss_index.py
+```
+
+Or use Make targets:
+
+```bash
+make install
+make data-download
+make data-prepare
+make index-build
+```
+
 ## Status
 
 This repository contains the implementation of a full retrieval-augmented conversational generation pipeline:

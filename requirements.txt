@@ -1,0 +1,11 @@
+datasets
+sentence-transformers
+faiss-cpu
+numpy
+tqdm
+orjson
+streamlit
+wandb
+orbax-checkpoint
+jax
+flax

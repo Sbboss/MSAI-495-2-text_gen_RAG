@@ -1,4 +1,6 @@
 datasets
+huggingface_hub
+pyarrow
 sentence-transformers
 faiss-cpu
 numpy

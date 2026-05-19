@@ -1,15 +1,18 @@
 PYTHON ?= python3
 
-.PHONY: install data-download data-prepare index-build
+.PHONY: install data-download data-clean clean-hf-cache
 
 install:
 	$(PYTHON) -m pip install -r requirements.txt
 
 data-download:
-	$(PYTHON) scripts/download_datasets.py
+	$(PYTHON) scripts/download_datasets.py --max-so-shards 20
 
-data-prepare:
-	$(PYTHON) scripts/prepare_retrieval_corpus.py
+data-download-wiki:
+	$(PYTHON) scripts/download_datasets.py --skip-so --with-wiki
 
-index-build:
-	$(PYTHON) scripts/build_faiss_index.py
+data-clean:
+	rm -rf data
+
+clean-hf-cache:
+	$(PYTHON) scripts/download_datasets.py --clear-cache-only

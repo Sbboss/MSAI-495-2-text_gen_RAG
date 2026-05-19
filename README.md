@@ -94,26 +94,25 @@ pip install -r requirements.txt
 
 ## Data Pipeline
 
-Run the full retrieval data workflow:
+**Phase 1 (training):** StackOverflow only — download 20 Parquet shards (~10 GB) for model training.
+
+**Phase 2 (RAG, later):** Wikipedia when you build the retrieval index.
 
 ```bash
-# 1) Download and store raw datasets
-python3 scripts/download_datasets.py
-
-# 2) Build chunked retrieval corpus JSONL
-python3 scripts/prepare_retrieval_corpus.py
-
-# 3) Build FAISS index + metadata
-python3 scripts/build_faiss_index.py
-```
-
-Or use Make targets:
-
-```bash
+# Phase 1: StackOverflow only (default)
 make install
 make data-download
-make data-prepare
-make index-build
+
+# Custom SO shard count
+python3 scripts/download_datasets.py --max-so-shards 20
+
+# Phase 2: add Wikipedia for RAG (optional, later)
+python3 scripts/download_datasets.py --skip-so --with-wiki
+# or: make data-download-wiki
+
+# Free disk
+make data-clean
+make clean-hf-cache
 ```
 
 ## Status

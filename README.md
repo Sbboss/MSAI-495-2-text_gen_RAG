@@ -110,6 +110,9 @@ python3 scripts/download_datasets.py --max-so-shards 20
 python3 scripts/download_datasets.py --skip-so --with-wiki
 # or: make data-download-wiki
 
+# Preprocess StackOverflow for training (notebook)
+jupyter notebook notebooks/preprocess_stackoverflow.ipynb
+
 # Free disk
 make data-clean
 make clean-hf-cache

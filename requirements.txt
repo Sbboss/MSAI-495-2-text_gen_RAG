@@ -1,6 +1,10 @@
 datasets
 huggingface_hub
 pyarrow
+duckdb
+tokenizers
+ipykernel
+jupyter
 sentence-transformers
 faiss-cpu
 numpy

@@ -65,9 +65,11 @@ def main() -> None:
     print_path("_join_parts (delete if done)", processed / "_join_parts")
     print_path("qa_raw_train.parquet", processed / "qa_raw_train.parquet")
     print_path("qa_raw_val.parquet", processed / "qa_raw_val.parquet")
+    print_path("qa_raw_test.parquet", processed / "qa_raw_test.parquet")
     print_path("tokenizer/", processed / "tokenizer")
     print_path("tokenized/train/", processed / "tokenized" / "train")
     print_path("tokenized/val/", processed / "tokenized" / "val")
+    print_path("tokenized/test/", processed / "tokenized" / "test")
     print_path("manifest.json", processed / "tokenized" / "manifest.json")
 
     if processed.exists():

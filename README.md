@@ -113,6 +113,13 @@ python3 scripts/download_datasets.py --skip-so --with-wiki
 # Preprocess StackOverflow for training (notebook)
 jupyter notebook notebooks/preprocess_stackoverflow.ipynb
 
+# Train GPT-2 (JAX/Flax notebook scaffold — you implement the loop)
+pip install -r requirements-train-jax.txt
+jupyter notebook notebooks/train_gpt2.ipynb
+
+# All training knobs are in params.yml
+# (model size, batch size, resume from checkpoint, eval/save frequency)
+
 # Free disk
 make data-clean
 make clean-hf-cache

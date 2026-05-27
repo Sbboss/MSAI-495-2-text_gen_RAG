@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from tokenizers import Tokenizer, models, pre_tokenizers, processors, trainers
+from tokenizers import Tokenizer, decoders, models, pre_tokenizers, processors, trainers
 
 SPECIAL_TOKENS = ["<pad>", "<unk>", "<bos>", "<eos>", "<sep>"]
 
@@ -67,6 +67,7 @@ def train_tokenizer(sample_path, out_dir, vocab_size: int) -> Tokenizer:
     )
     tokenizer.train_from_iterator(line_iter(), trainer=trainer)
     tokenizer.post_processor = processors.ByteLevel(trim_offsets=False)
+    tokenizer.decoder = decoders.ByteLevel()
     out_dir.mkdir(parents=True, exist_ok=True)
     tokenizer.save(str(out_dir / "tokenizer.json"))
     return tokenizer

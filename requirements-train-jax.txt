@@ -1,0 +1,9 @@
+# Optional: install for notebooks/train_gpt2.ipynb (JAX/Flax training)
+jax
+flax
+optax
+orbax-checkpoint
+pyarrow
+tokenizers
+tqdm
+pyyaml

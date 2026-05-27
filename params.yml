@@ -1,0 +1,59 @@
+# Cluster nodes often have a tiny /tmp quota. JAX writes PTX there during compile.
+# Point temp files at project disk (restart kernel after changing).
+runtime:
+  tmp_dir: artifacts/jax_tmp
+  xdg_cache_dir: artifacts/xdg_cache
+  cuda_cache_dir: artifacts/cuda_cache
+  jax_compilation_cache_dir: artifacts/jax_cache
+
+paths:
+  processed_dir: data/processed
+  tokenizer_relpath: tokenizer/tokenizer.json
+  train_glob: tokenized/train/chunk_*.parquet
+  val_glob: tokenized/val/chunk_*.parquet
+  test_glob: tokenized/test/chunk_*.parquet
+  manifest_relpath: tokenized/manifest.json
+  checkpoint_dir: checkpoints/gpt2-so-jax
+  metrics_filename: metrics.json
+
+data:
+  max_seq_len: 1024
+  target_vocab_size: 24000
+  pad_token: "<pad>"
+
+model:
+  n_layer: 12
+  n_head: 12
+  n_embd: 768
+  dropout: 0.1
+
+training:
+  global_batch_size: 16
+  grad_accum_steps: 1
+  lr: 0.00012
+  weight_decay: 0.1
+  max_steps: 50000
+  warmup_steps: 500
+  log_every: 20
+  eval_every: 1000
+  save_every: 2000
+  seed: 42
+
+resume:
+  enabled: false
+  checkpoint: latest
+  run_dir: ""
+
+distributed:
+  use_pmap: true
+  require_num_devices: 2
+
+dataloader:
+  row_batch_multiplier: 4
+
+generation:
+  context_window: 256
+  max_new_tokens: 64
+  temperature: 0.8
+  top_k: 40
+  checkpoint_path: ""

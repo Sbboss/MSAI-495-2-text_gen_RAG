@@ -78,6 +78,11 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--context-window", type=int, default=256)
     p.add_argument("--seed", type=int, default=123)
     p.add_argument(
+        "--grounded-format",
+        action="store_true",
+        help="Wrap prompts with a grounding template (cause/fix/code) before generation.",
+    )
+    p.add_argument(
         "--output",
         type=str,
         default="artifacts/inference_eval_results.json",
@@ -265,6 +270,31 @@ def _clean_text(text: str) -> str:
     text = re.sub(r"\(\s+", "(", text)
     text = re.sub(r"\s+\)", ")", text)
     return text.strip()
+
+
+def _ground_prompt(prompt: str) -> str:
+    """Add lightweight structure so generations stay tied to user question."""
+    if "<sep> Answer:" in prompt:
+        q_part, _ = prompt.split("<sep> Answer:", 1)
+        q_part = q_part.rstrip()
+        return (
+            f"{q_part}\n"
+            "Answer requirements:\n"
+            "1) Root cause in 1-2 lines.\n"
+            "2) Concrete fix steps.\n"
+            "3) Minimal code/example.\n"
+            "4) Keep answer specific to this question only.\n"
+            "<sep> Answer:\n"
+        )
+    # Chat-style fallback.
+    return (
+        f"{prompt.rstrip()}\n"
+        "Response requirements:\n"
+        "- Explain root cause first.\n"
+        "- Give actionable steps.\n"
+        "- Add one concise code/example block when relevant.\n"
+        "- Stay specific to the question.\n"
+    )
 
 
 def _resolve_checkpoint_path(project_root: Path, cfg: dict[str, Any], args: argparse.Namespace) -> Path:
@@ -507,7 +537,8 @@ def main() -> None:
     results: list[dict[str, Any]] = []
     t0 = time.time()
     for i, item in enumerate(tqdm(PROMPTS, desc="Generating prompts")):
-        ids = encode(item.prompt)
+        prompt_for_gen = _ground_prompt(item.prompt) if args.grounded_format else item.prompt
+        ids = encode(prompt_for_gen)
         gen_ids = list(ids)
         rng_key = jax.random.PRNGKey(args.seed + i)
         prompt_len = len(gen_ids)
@@ -548,6 +579,7 @@ def main() -> None:
             {
                 "category": item.category,
                 "prompt": item.prompt,
+                "prompt_used_for_generation": prompt_for_gen,
                 "generated_text_full": generated_text,
                 "generated_answer_only": answer_text,
                 "prompt_tokens": prompt_len,
@@ -596,6 +628,7 @@ def main() -> None:
                 "eos_bias": args.eos_bias,
                 "context_window": context_window,
             },
+            "grounded_format": bool(args.grounded_format),
             "model_config": {
                 "vocab_size": vocab_size,
                 "n_layer": n_layer,

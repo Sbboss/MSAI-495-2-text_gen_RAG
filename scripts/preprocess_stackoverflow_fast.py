@@ -75,6 +75,22 @@ def parse_args() -> argparse.Namespace:
         default=40,
         help="Keep only rows whose answer text has at least this many chars.",
     )
+    p.add_argument(
+        "--min-answer-words",
+        type=int,
+        default=8,
+        help="Keep only rows whose answer text has at least this many word-like tokens.",
+    )
+    p.add_argument(
+        "--drop-short-thanks",
+        action="store_true",
+        help="Drop trivial boilerplate answers like 'thanks', 'solved', 'works now'.",
+    )
+    p.add_argument(
+        "--best-answer-only",
+        action="store_true",
+        help="Keep only top answer per question_id (by answer_score, then answer length).",
+    )
     p.add_argument("--vocab-size", type=int, default=16_000)
     p.add_argument("--tokenizer-sample-rows", type=int, default=200_000)
     p.add_argument("--skip-split", action="store_true")
@@ -127,6 +143,9 @@ def duckdb_split(
     test_fraction: float,
     min_answer_score: int,
     min_answer_chars: int,
+    min_answer_words: int,
+    drop_short_thanks: bool,
+    best_answer_only: bool,
     memory_limit: str,
     threads: int,
 ) -> tuple[int, int, int]:
@@ -142,25 +161,51 @@ def duckdb_split(
     configure_duckdb(con, memory_limit, threads)
     src = f"read_parquet('{qa_pairs}')"
     cols = "question_id, title, question_body, tags, answer_body, answer_score"
+    # Keep punctuation/code text intact. We only filter out low-signal rows.
+    word_count_expr = (
+        "CASE "
+        "WHEN length(trim(regexp_replace(COALESCE(CAST(answer_body AS VARCHAR), ''), '[^A-Za-z0-9_]+', ' ', 'g'))) = 0 THEN 0 "
+        "ELSE length(trim(regexp_replace(COALESCE(CAST(answer_body AS VARCHAR), ''), '[^A-Za-z0-9_]+', ' ', 'g'))) "
+        "- length(replace(trim(regexp_replace(COALESCE(CAST(answer_body AS VARCHAR), ''), '[^A-Za-z0-9_]+', ' ', 'g')), ' ', '')) + 1 "
+        "END"
+    )
     quality_where = (
         f"COALESCE(answer_score, 0) >= {int(min_answer_score)} "
-        f"AND length(COALESCE(CAST(answer_body AS VARCHAR), '')) >= {int(min_answer_chars)}"
+        f"AND length(COALESCE(CAST(answer_body AS VARCHAR), '')) >= {int(min_answer_chars)} "
+        f"AND ({word_count_expr}) >= {int(min_answer_words)}"
     )
+    if drop_short_thanks:
+        quality_where += (
+            " AND NOT regexp_matches("
+            "lower(trim(COALESCE(CAST(answer_body AS VARCHAR), ''))), "
+            "'^(thanks!?|thank you!?|solved!?|works!?|works now!?|nvm|fixed)$'"
+            ")"
+        )
+    select_src = src
+    if best_answer_only:
+        select_src = (
+            f"(SELECT {cols} FROM ("
+            f"SELECT {cols}, "
+            "row_number() OVER (PARTITION BY question_id ORDER BY COALESCE(answer_score, -1000000) DESC, "
+            "length(COALESCE(CAST(answer_body AS VARCHAR), '')) DESC) AS _rn "
+            f"FROM {src}"
+            ") t WHERE _rn = 1)"
+        )
 
     print("DuckDB: writing train split...")
     con.execute(
-        f"COPY (SELECT {cols} FROM {src} WHERE {quality_where} AND {VAL_SPLIT_SQL} >= {split_threshold}) "
+        f"COPY (SELECT {cols} FROM {select_src} WHERE {quality_where} AND {VAL_SPLIT_SQL} >= {split_threshold}) "
         f"TO '{train_raw}' (FORMAT PARQUET, COMPRESSION ZSTD)"
     )
     print("DuckDB: writing val split...")
     con.execute(
-        f"COPY (SELECT {cols} FROM {src} WHERE {quality_where} AND {VAL_SPLIT_SQL} >= {test_threshold} "
+        f"COPY (SELECT {cols} FROM {select_src} WHERE {quality_where} AND {VAL_SPLIT_SQL} >= {test_threshold} "
         f"AND {VAL_SPLIT_SQL} < {split_threshold}) "
         f"TO '{val_raw}' (FORMAT PARQUET, COMPRESSION ZSTD)"
     )
     print("DuckDB: writing test split...")
     con.execute(
-        f"COPY (SELECT {cols} FROM {src} WHERE {quality_where} AND {VAL_SPLIT_SQL} < {test_threshold}) "
+        f"COPY (SELECT {cols} FROM {select_src} WHERE {quality_where} AND {VAL_SPLIT_SQL} < {test_threshold}) "
         f"TO '{test_raw}' (FORMAT PARQUET, COMPRESSION ZSTD)"
     )
     n_train = con.execute(f"SELECT count(*) FROM read_parquet('{train_raw}')").fetchone()[0]
@@ -381,7 +426,10 @@ def main() -> None:
         print(f"DuckDB split (memory={args.memory_limit})...")
         print(
             f"Quality filters: min_answer_score={args.min_answer_score}, "
-            f"min_answer_chars={args.min_answer_chars}"
+            f"min_answer_chars={args.min_answer_chars}, "
+            f"min_answer_words={args.min_answer_words}, "
+            f"drop_short_thanks={args.drop_short_thanks}, "
+            f"best_answer_only={args.best_answer_only}"
         )
         n_train, n_val, n_test = duckdb_split(
             qa_pairs,
@@ -392,6 +440,9 @@ def main() -> None:
             args.test_fraction,
             args.min_answer_score,
             args.min_answer_chars,
+            args.min_answer_words,
+            args.drop_short_thanks,
+            args.best_answer_only,
             args.memory_limit,
             args.threads,
         )
@@ -459,6 +510,9 @@ def main() -> None:
         "filters": {
             "min_answer_score": args.min_answer_score,
             "min_answer_chars": args.min_answer_chars,
+            "min_answer_words": args.min_answer_words,
+            "drop_short_thanks": args.drop_short_thanks,
+            "best_answer_only": args.best_answer_only,
         },
         "workers": args.workers,
     }

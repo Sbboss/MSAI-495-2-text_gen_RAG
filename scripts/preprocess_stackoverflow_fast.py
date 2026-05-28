@@ -19,6 +19,7 @@ import json
 import os
 import shutil
 import sys
+import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
@@ -132,6 +133,11 @@ def configure_duckdb(con: duckdb.DuckDBPyConnection, memory_limit: str, threads:
     con.execute("SET preserve_insertion_order=false")
     if threads > 0:
         con.execute(f"SET threads={threads}")
+    # Nice-to-have progress output on long COPY/SELECT phases (if supported).
+    try:
+        con.execute("PRAGMA enable_progress_bar")
+    except Exception:
+        pass
 
 
 def duckdb_split(
@@ -193,34 +199,45 @@ def duckdb_split(
         )
 
     print("DuckDB: writing train split...")
+    t0 = time.time()
     con.execute(
         f"COPY (SELECT {cols} FROM {select_src} WHERE {quality_where} AND {VAL_SPLIT_SQL} >= {split_threshold}) "
         f"TO '{train_raw}' (FORMAT PARQUET, COMPRESSION ZSTD)"
     )
+    print(f"DuckDB: train split done in {time.time() - t0:.1f}s")
     print("DuckDB: writing val split...")
+    t1 = time.time()
     con.execute(
         f"COPY (SELECT {cols} FROM {select_src} WHERE {quality_where} AND {VAL_SPLIT_SQL} >= {test_threshold} "
         f"AND {VAL_SPLIT_SQL} < {split_threshold}) "
         f"TO '{val_raw}' (FORMAT PARQUET, COMPRESSION ZSTD)"
     )
+    print(f"DuckDB: val split done in {time.time() - t1:.1f}s")
     print("DuckDB: writing test split...")
+    t2 = time.time()
     con.execute(
         f"COPY (SELECT {cols} FROM {select_src} WHERE {quality_where} AND {VAL_SPLIT_SQL} < {test_threshold}) "
         f"TO '{test_raw}' (FORMAT PARQUET, COMPRESSION ZSTD)"
     )
+    print(f"DuckDB: test split done in {time.time() - t2:.1f}s")
+    t3 = time.time()
     n_train = con.execute(f"SELECT count(*) FROM read_parquet('{train_raw}')").fetchone()[0]
     n_val = con.execute(f"SELECT count(*) FROM read_parquet('{val_raw}')").fetchone()[0]
     n_test = con.execute(f"SELECT count(*) FROM read_parquet('{test_raw}')").fetchone()[0]
+    print(f"DuckDB: row counts done in {time.time() - t3:.1f}s")
     con.close()
     return n_train, n_val, n_test
 
 
 def collect_tokenizer_sample(train_raw: Path, sample_path: Path, max_rows: int, max_chars: int) -> int:
     n = 0
+    dataset = pds.dataset(str(train_raw), format="parquet")
+    scanner = dataset.scanner(columns=["title", "question_body", "tags", "answer_body"], batch_size=8192)
+    total_rows = scanner.count_rows()
+    total_batches = (total_rows + 8192 - 1) // 8192
+    print(f"Collect tokenizer sample: target={max_rows:,} rows (available={total_rows:,})")
     with sample_path.open("w", encoding="utf-8") as fh:
-        for batch in pds.dataset(str(train_raw), format="parquet").scanner(
-            columns=["title", "question_body", "tags", "answer_body"], batch_size=8192
-        ).to_batches():
+        for batch in tqdm(scanner.to_batches(), total=total_batches, desc="Tokenizer sample"):
             for row in zip(*(batch.column(i).to_pylist() for i in range(4))):
                 fh.write(format_qa_row(*row, max_chars=max_chars).replace("\n", " ") + "\n")
                 n += 1

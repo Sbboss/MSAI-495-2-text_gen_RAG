@@ -99,6 +99,12 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--skip-tokenize", action="store_true")
     p.add_argument("--cleanup-parts", action="store_true")
     p.add_argument("--sanity-only", action="store_true")
+    p.add_argument(
+        "--prompt-style",
+        choices=["standard", "grounded_qa"],
+        default="standard",
+        help="Training text template format for Q/A rows.",
+    )
     return p.parse_args()
 
 
@@ -229,7 +235,13 @@ def duckdb_split(
     return n_train, n_val, n_test
 
 
-def collect_tokenizer_sample(train_raw: Path, sample_path: Path, max_rows: int, max_chars: int) -> int:
+def collect_tokenizer_sample(
+    train_raw: Path,
+    sample_path: Path,
+    max_rows: int,
+    max_chars: int,
+    prompt_style: str,
+) -> int:
     n = 0
     dataset = pds.dataset(str(train_raw), format="parquet")
     scanner = dataset.scanner(columns=["title", "question_body", "tags", "answer_body"], batch_size=8192)
@@ -239,7 +251,11 @@ def collect_tokenizer_sample(train_raw: Path, sample_path: Path, max_rows: int, 
     with sample_path.open("w", encoding="utf-8") as fh:
         for batch in tqdm(scanner.to_batches(), total=total_batches, desc="Tokenizer sample"):
             for row in zip(*(batch.column(i).to_pylist() for i in range(4))):
-                fh.write(format_qa_row(*row, max_chars=max_chars).replace("\n", " ") + "\n")
+                # Keep tokenizer sample text aligned to final training prompt template.
+                fh.write(
+                    format_qa_row(*row, max_chars=max_chars, prompt_style=prompt_style).replace("\n", " ")
+                    + "\n"
+                )
                 n += 1
                 if n >= max_rows:
                     return n
@@ -251,18 +267,20 @@ _G_TOK = None
 _G_PAD = 0
 _G_MAX_LEN = 1024
 _G_MAX_TEXT = 12000
+_G_PROMPT_STYLE = "standard"
 
 
-def _init_worker(tokenizer_path: str, max_seq_len: int, max_text_chars: int) -> None:
-    global _G_TOK, _G_PAD, _G_MAX_LEN, _G_MAX_TEXT
+def _init_worker(tokenizer_path: str, max_seq_len: int, max_text_chars: int, prompt_style: str) -> None:
+    global _G_TOK, _G_PAD, _G_MAX_LEN, _G_MAX_TEXT, _G_PROMPT_STYLE
     _G_TOK = Tokenizer.from_file(tokenizer_path)
     _G_PAD = _G_TOK.token_to_id("<pad>") or 0
     _G_MAX_LEN = max_seq_len
     _G_MAX_TEXT = max_text_chars
+    _G_PROMPT_STYLE = prompt_style
 
 
 def _encode_rows(rows: list[tuple]) -> list[list[int]]:
-    texts = [format_qa_row(r[1], r[2], r[3], r[4], _G_MAX_TEXT) for r in rows]
+    texts = [format_qa_row(r[1], r[2], r[3], r[4], _G_MAX_TEXT, prompt_style=_G_PROMPT_STYLE) for r in rows]
     encodings = _G_TOK.encode_batch(texts)
     return [pad_ids(e.ids, _G_MAX_LEN, _G_PAD) for e in encodings]
 
@@ -284,8 +302,9 @@ def _encode_rows_with_tokenizer(
     pad_id: int,
     max_seq_len: int,
     max_text_chars: int,
+    prompt_style: str,
 ) -> list[list[int]]:
-    texts = [format_qa_row(r[1], r[2], r[3], r[4], max_text_chars) for r in rows]
+    texts = [format_qa_row(r[1], r[2], r[3], r[4], max_text_chars, prompt_style=prompt_style) for r in rows]
     encodings = tok.encode_batch(texts)
     return [pad_ids(e.ids, max_seq_len, pad_id) for e in encodings]
 
@@ -299,6 +318,7 @@ def tokenize_parquet_fast(
     workers: int,
     batch_size: int,
     rows_per_chunk_file: int,
+    prompt_style: str,
 ) -> int:
     if out_dir.exists():
         shutil.rmtree(out_dir)
@@ -316,7 +336,14 @@ def tokenize_parquet_fast(
 
     if workers <= 1:
         return _tokenize_single_process(
-            scanner, out_dir, tokenizer_path, max_seq_len, max_text_chars, rows_per_chunk_file, n_batches
+            scanner,
+            out_dir,
+            tokenizer_path,
+            max_seq_len,
+            max_text_chars,
+            rows_per_chunk_file,
+            n_batches,
+            prompt_style,
         )
     return _tokenize_multiprocess(
         scanner,
@@ -327,6 +354,7 @@ def tokenize_parquet_fast(
         workers,
         rows_per_chunk_file,
         n_batches,
+        prompt_style,
     )
 
 
@@ -338,6 +366,7 @@ def _tokenize_single_process(
     max_text_chars: int,
     rows_per_chunk_file: int,
     n_batches: int,
+    prompt_style: str,
 ) -> int:
     """Usually fastest: tokenizers encode_batch releases the GIL (Rust)."""
     tok = Tokenizer.from_file(str(tokenizer_path))
@@ -349,7 +378,7 @@ def _tokenize_single_process(
     for batch in tqdm(scanner.to_batches(), total=n_batches, desc="Tokenize"):
         col = [batch.column(i).to_pylist() for i in range(len(ROW_COLS))]
         rows = list(zip(*col))
-        buffer.extend(_encode_rows_with_tokenizer(rows, tok, pad_id, max_seq_len, max_text_chars))
+        buffer.extend(_encode_rows_with_tokenizer(rows, tok, pad_id, max_seq_len, max_text_chars, prompt_style))
         if len(buffer) >= rows_per_chunk_file:
             write_chunk_file(out_dir, chunk_idx, buffer)
             total += len(buffer)
@@ -381,6 +410,7 @@ def _tokenize_multiprocess(
     workers: int,
     rows_per_chunk_file: int,
     n_batches: int,
+    prompt_style: str,
 ) -> int:
     total = 0
     chunk_idx = 0
@@ -389,7 +419,7 @@ def _tokenize_multiprocess(
     with ProcessPoolExecutor(
         max_workers=workers,
         initializer=_init_worker,
-        initargs=(str(tokenizer_path), max_seq_len, max_text_chars),
+        initargs=(str(tokenizer_path), max_seq_len, max_text_chars, prompt_style),
     ) as pool:
         futures = []
         for batch in tqdm(scanner.to_batches(), total=n_batches, desc="Tokenize (pool)"):
@@ -429,6 +459,7 @@ def main() -> None:
     tokenizer_path = tokenizer_dir / "tokenizer.json"
 
     print(f"Script version: {SCRIPT_VERSION} (expect: no 'datasets', no 'Generating train split')")
+    print(f"Prompt style: {args.prompt_style}")
     sanity_check(processed, qa_pairs)
     if args.sanity_only:
         return
@@ -468,7 +499,13 @@ def main() -> None:
     if not args.skip_tokenizer:
         print("Training BPE tokenizer...")
         sample_path.unlink(missing_ok=True)
-        n = collect_tokenizer_sample(train_raw, sample_path, args.tokenizer_sample_rows, args.max_text_chars)
+        n = collect_tokenizer_sample(
+            train_raw,
+            sample_path,
+            args.tokenizer_sample_rows,
+            args.max_text_chars,
+            args.prompt_style,
+        )
         print(f"Sample lines: {n:,}")
         train_tokenizer(sample_path, tokenizer_dir, args.vocab_size)
         sample_path.unlink(missing_ok=True)
@@ -494,6 +531,7 @@ def main() -> None:
         args.workers,
         args.encode_batch_size,
         args.rows_per_chunk_file,
+        args.prompt_style,
     )
     n_va = tokenize_parquet_fast(
         val_raw,
@@ -504,6 +542,7 @@ def main() -> None:
         args.workers,
         args.encode_batch_size,
         args.rows_per_chunk_file,
+        args.prompt_style,
     )
     n_te = tokenize_parquet_fast(
         test_raw,
@@ -514,6 +553,7 @@ def main() -> None:
         args.workers,
         args.encode_batch_size,
         args.rows_per_chunk_file,
+        args.prompt_style,
     )
 
     manifest = {
@@ -524,6 +564,7 @@ def main() -> None:
         "max_seq_len": args.max_seq_len,
         "stats": {"train": n_tr, "val": n_va, "test": n_te},
         "fractions": {"val": args.val_fraction, "test": args.test_fraction},
+        "prompt_style": args.prompt_style,
         "filters": {
             "min_answer_score": args.min_answer_score,
             "min_answer_chars": args.min_answer_chars,

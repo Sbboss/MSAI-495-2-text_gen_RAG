@@ -18,7 +18,7 @@ paths:
 
 data:
   max_seq_len: 1024
-  target_vocab_size: 24000
+  target_vocab_size: 32000
   pad_token: "<pad>"
 
 model:
@@ -32,11 +32,11 @@ training:
   grad_accum_steps: 1
   lr: 0.00012
   weight_decay: 0.1
-  max_steps: 50000
-  warmup_steps: 500
+  max_steps: 120000
+  warmup_steps: 2000
   log_every: 20
-  eval_every: 1000
-  save_every: 2000
+  eval_every: 5000
+  save_every: 10000
   seed: 42
 
 resume:

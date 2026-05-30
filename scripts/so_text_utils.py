@@ -34,11 +34,42 @@ def to_text(value, max_chars: int | None = None) -> str:
     return s
 
 
-def format_qa_row(title, question_body, tags, answer_body, max_chars: int) -> str:
+def format_qa_row(
+    title,
+    question_body,
+    tags,
+    answer_body,
+    max_chars: int,
+    prompt_style: str = "standard",
+) -> str:
     title = to_text(title, max_chars // 4)
     question_body = to_text(question_body, max_chars // 2)
     tags = to_text(tags, max_chars // 8)
     answer_body = to_text(answer_body, max_chars)
+    if prompt_style == "grounded_qa":
+        parts = [
+            "<bos> Task: Answer the technical question accurately and concisely.",
+            "Question:",
+        ]
+        if title:
+            parts.append(f"Title: {title}")
+        if question_body:
+            parts.append(f"Body: {question_body}")
+        if tags:
+            parts.append(f"Tags: {tags}")
+        parts.extend(
+            [
+                "Answer requirements:",
+                "1) State likely root cause briefly.",
+                "2) Provide concrete fix steps.",
+                "3) Add a minimal example when relevant.",
+                "<sep> Final Answer:",
+                answer_body,
+                "<eos>",
+            ]
+        )
+        return "\n".join(parts)
+
     parts = ["<bos> Question:"]
     if title:
         parts.append(title)

@@ -2,8 +2,8 @@
   "metadata": {
     "project_root": "/projects/e32706/hia9393/GenAI/Text-Project",
     "params_path": "/projects/e32706/hia9393/GenAI/Text-Project/params.yml",
-    "checkpoint_path": "/projects/e32706/hia9393/GenAI/Text-Project/checkpoints/gpt2-so-jax/20260527_203225/step_130000",
-    "checkpoint_step": 130000,
+    "checkpoint_path": "/projects/e32706/hia9393/GenAI/Text-Project/checkpoints/gpt2-so-jax/20260528_231243/step_200000",
+    "checkpoint_step": 200000,
     "runtime_env": {
       "TMPDIR": "/projects/e32706/hia9393/GenAI/Text-Project/artifacts/jax_tmp",
       "XDG_CACHE_HOME": "/projects/e32706/hia9393/GenAI/Text-Project/artifacts/xdg_cache",
@@ -16,56 +16,56 @@
       "cuda:1"
     ],
     "decode_settings": {
-      "max_new_tokens": 80,
-      "min_new_tokens": 20,
-      "temperature": 0.25,
-      "top_k": 20,
+      "max_new_tokens": 96,
+      "min_new_tokens": 24,
+      "temperature": 0.5,
+      "top_k": 50,
       "repetition_penalty": 1.15,
       "no_repeat_ngram_size": 3,
       "frequency_penalty": 0.2,
       "presence_penalty": 0.05,
-      "eos_bias": 2.5,
+      "eos_bias": 1.5,
       "context_window": 256
     },
     "grounded_format": true,
     "model_config": {
-      "vocab_size": 24000,
+      "vocab_size": 32000,
       "n_layer": 12,
       "n_head": 12,
       "n_embd": 768,
       "max_seq_len": 1024
     },
-    "elapsed_seconds": 528.87,
+    "elapsed_seconds": 129.83,
     "num_prompts": 12,
-    "avg_auto_total_0_10": 2.8333,
+    "avg_auto_total_0_10": 4.3333,
     "eos_end_rate": 0.1667,
-    "template_noise_rate": 0.0,
-    "created_at_unix": 1779945150
+    "template_noise_rate": 0.0833,
+    "created_at_unix": 1780080769
   },
   "results": [
     {
       "category": "so_style",
       "prompt": "<bos> Question:\nHow do I fix 'TypeError: list object has no attribute strip' in Python when a column can be list or string?\nTags: python pandas\n<sep> Answer:\n",
       "prompt_used_for_generation": "<bos> Question:\nHow do I fix 'TypeError: list object has no attribute strip' in Python when a column can be list or string?\nTags: python pandas\nAnswer requirements:\n1) Root cause in 1-2 lines.\n2) Concrete fix steps.\n3) Minimal code/example.\n4) Keep answer specific to this question only.\n<sep> Answer:\n",
-      "generated_text_full": "Question: How do I fix ' Type Error: list object has no attribute strip ' in Python when a column can be list or string? Tags: python p and as Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: I think you should try to use the ` list ` module instead of ` list `. It 's not clear how many times you have to deal with this, but it will help you out on your own.",
-      "generated_answer_only": "I think you should try to use the ` list ` module instead of ` list `. It 's not clear how many times you have to deal with this, but it will help you out on your own.",
+      "generated_text_full": "Question: How do I fix ' Type Error: list object has no attribute strip ' in Python when a column can be list or string? Tags: python p and as Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: First, it is not possible to solve this problem without changing the source code of your original question. You could try to use the [ P and as Data Frame ](https:// p and as. py data frame. org /) library for this purpose. Then you could create a new dataframe in which the columns are the columns you want to replace with your new data frame.",
+      "generated_answer_only": "First, it is not possible to solve this problem without changing the source code of your original question. You could try to use the [ P and as Data Frame ](https:// p and as. py data frame. org /) library for this purpose. Then you could create a new dataframe in which the columns are the columns you want to replace with your new data frame.",
       "prompt_tokens": 84,
-      "generated_tokens": 44,
+      "generated_tokens": 78,
       "ended_with_eos": true,
       "template_noise_flag": false,
       "auto_scores": {
-        "task_match_0_2": 1,
-        "grounding_0_2": 1,
+        "task_match_0_2": 0,
+        "grounding_0_2": 0,
         "coherence_0_2": 2,
-        "actionability_0_2": 0,
+        "actionability_0_2": 2,
         "technicality_0_2": 0,
         "auto_total_0_10": 4,
         "signals": {
-          "prompt_keyword_overlap_ratio": 0.1053,
+          "prompt_keyword_overlap_ratio": 0.0526,
           "trigram_repetition_ratio": 0.0,
-          "has_steps": false,
+          "has_steps": true,
           "has_code_like_tokens": false,
-          "word_count": 39
+          "word_count": 66
         }
       },
       "manual_score_template": {
@@ -81,25 +81,25 @@
       "category": "so_style",
       "prompt": "<bos> Question:\nJAX pmap only sees one GPU although two GPUs are available. What should I check first?\nTags: jax gpu\n<sep> Answer:\n",
       "prompt_used_for_generation": "<bos> Question:\nJAX pmap only sees one GPU although two GPUs are available. What should I check first?\nTags: jax gpu\nAnswer requirements:\n1) Root cause in 1-2 lines.\n2) Concrete fix steps.\n3) Minimal code/example.\n4) Keep answer specific to this question only.\n<sep> Answer:\n",
-      "generated_text_full": "Question: JAX p map only sees one GPU although two GPU s are available. What should I check first? Tags: jax g pu Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: I 'm not sure if it 's related to the fact that you have a lot of questions about how to solve your problem, but I think the solution is to use a combination of [ http:// www. codeproject. com / KB / cs / C _ and _ X L _ in _ the _ IE ](http:// web. archive. org / web / 20 14 10 16 12 15 / https",
-      "generated_answer_only": "I 'm not sure if it 's related to the fact that you have a lot of questions about how to solve your problem, but I think the solution is to use a combination of [ http:// www. codeproject. com / KB / cs / C _ and _ X L _ in _ the _ IE ](http:// web. archive. org / web / 20 14 10 16 12 15 / https",
+      "generated_text_full": "Question: JAX p map only sees one GPU although two GPU s are available. What should I check first? Tags: jax g pu Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: > What What What How Can I Check First? If you want to know the best way to do it, you can use [ G PU G PU ](https:// github. com / g pu / g vm - g lf). There 's a project on GitHub that doesn 't seem to have a single source file for this project, but you 'll need to read up on how to get started with it.",
+      "generated_answer_only": "> What What What How Can I Check First? If you want to know the best way to do it, you can use [ G PU G PU ](https:// github. com / g pu / g vm - g lf). There 's a project on GitHub that doesn 't seem to have a single source file for this project, but you 'll need to read up on how to get started with it.",
       "prompt_tokens": 77,
-      "generated_tokens": 80,
-      "ended_with_eos": false,
+      "generated_tokens": 84,
+      "ended_with_eos": true,
       "template_noise_flag": false,
       "auto_scores": {
-        "task_match_0_2": 0,
-        "grounding_0_2": 0,
+        "task_match_0_2": 2,
+        "grounding_0_2": 1,
         "coherence_0_2": 2,
-        "actionability_0_2": 0,
+        "actionability_0_2": 2,
         "technicality_0_2": 0,
-        "auto_total_0_10": 2,
+        "auto_total_0_10": 7,
         "signals": {
-          "prompt_keyword_overlap_ratio": 0.0,
+          "prompt_keyword_overlap_ratio": 0.15,
           "trigram_repetition_ratio": 0.0,
-          "has_steps": false,
+          "has_steps": true,
           "has_code_like_tokens": false,
-          "word_count": 72
+          "word_count": 73
         }
       },
       "manual_score_template": {
@@ -115,10 +115,10 @@
       "category": "so_style",
       "prompt": "<bos> Question:\nDuckDB join on large parquet runs out of memory. What memory-safe strategy should I use?\nTags: duckdb parquet\n<sep> Answer:\n",
       "prompt_used_for_generation": "<bos> Question:\nDuckDB join on large parquet runs out of memory. What memory-safe strategy should I use?\nTags: duckdb parquet\nAnswer requirements:\n1) Root cause in 1-2 lines.\n2) Concrete fix steps.\n3) Minimal code/example.\n4) Keep answer specific to this question only.\n<sep> Answer:\n",
-      "generated_text_full": "Question: D uck DB join on large par qu et runs out of memory. What memory - safe strategy should I use? Tags: d uck db par qu et Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: I think the following is a good starting point for you to get started with the same problem as your original question. The solution is to remove all the comments from the comments and add them to the database. This will allow you to keep track of how many comments are being added / rem oving from the database, but still keep track when there 's more than one comment in the database (or",
-      "generated_answer_only": "I think the following is a good starting point for you to get started with the same problem as your original question. The solution is to remove all the comments from the comments and add them to the database. This will allow you to keep track of how many comments are being added / rem oving from the database, but still keep track when there 's more than one comment in the database (or",
-      "prompt_tokens": 83,
-      "generated_tokens": 80,
+      "generated_text_full": "Question: D uck DB join on large par qu et runs out of memory. What memory - safe strategy should I use? Tags: duck db par qu et Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: The most common problem here is that the ` d ag ` command is not being executed and it is throwing the following error message: > No d ag found in the specified path (or no D AG). If you want to run a single file, use [ d ag ](https:// docs. oracle. com / javase / tutorial / java / n uts and ro / dist / index. html # d ag) instead, using the `- X ` flag on the",
+      "generated_answer_only": "The most common problem here is that the ` d ag ` command is not being executed and it is throwing the following error message: > No d ag found in the specified path (or no D AG). If you want to run a single file, use [ d ag ](https:// docs. oracle. com / javase / tutorial / java / n uts and ro / dist / index. html # d ag) instead, using the `- X ` flag on the",
+      "prompt_tokens": 82,
+      "generated_tokens": 96,
       "ended_with_eos": false,
       "template_noise_flag": false,
       "auto_scores": {
@@ -133,7 +133,7 @@
           "trigram_repetition_ratio": 0.0,
           "has_steps": false,
           "has_code_like_tokens": false,
-          "word_count": 74
+          "word_count": 82
         }
       },
       "manual_score_template": {
@@ -149,25 +149,25 @@
       "category": "debugging",
       "prompt": "<bos> Question:\nI get RESOURCE_EXHAUSTED: /tmp tempfile Disk quota exceeded during JAX training compile. How can I fix it on cluster?\nTags: jax hpc\n<sep> Answer:\n",
       "prompt_used_for_generation": "<bos> Question:\nI get RESOURCE_EXHAUSTED: /tmp tempfile Disk quota exceeded during JAX training compile. How can I fix it on cluster?\nTags: jax hpc\nAnswer requirements:\n1) Root cause in 1-2 lines.\n2) Concrete fix steps.\n3) Minimal code/example.\n4) Keep answer specific to this question only.\n<sep> Answer:\n",
-      "generated_text_full": "Question: I get RES OURCE _ EX HA UST ED: / tmp temp file Disk quot a exceeded during JAX training compile. How can I fix it on cluster? Tags: jax h pc Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: The following is the solution for me. The problem was that the code was not compiled with the compiler and had a different name than the one used by the compiler. In my case, I had a single file named \" my File \" which contains all of the files in my File. This fixed the issue for me, but I 'm sure there 's an easier way to solve this problem",
-      "generated_answer_only": "The following is the solution for me. The problem was that the code was not compiled with the compiler and had a different name than the one used by the compiler. In my case, I had a single file named \" my File \" which contains all of the files in my File. This fixed the issue for me, but I 'm sure there 's an easier way to solve this problem",
+      "generated_text_full": "Question: I get RES OURCE _ EX HA UST ED: / tmp temp file Disk quot a exceeded during JAX training compile. How can I fix it on cluster? Tags: jax h pc Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: You have 2 options: - - ``` - n ore load - s \" C:\\ Users \\ username \\ Documents \\ Visual Studio 201 9 \\ Projects \" - t C:\\ Users \\\\ username \\. csproj \\ bin \\ Release \\ Microsoft. NET Core. Framework \\ v 6. 0. 0 _ 0. exe / tmp temp file / tmp target / c: i / out: x / f: v / target: d / debug: error = no - output",
+      "generated_answer_only": "You have 2 options: - - ``` - n ore load - s \" C:\\ Users \\ username \\ Documents \\ Visual Studio 201 9 \\ Projects \" - t C:\\ Users \\\\ username \\. csproj \\ bin \\ Release \\ Microsoft. NET Core. Framework \\ v 6. 0. 0 _ 0. exe / tmp temp file / tmp target / c: i / out: x / f: v / target: d / debug: error = no - output",
       "prompt_tokens": 88,
-      "generated_tokens": 80,
+      "generated_tokens": 96,
       "ended_with_eos": false,
       "template_noise_flag": false,
       "auto_scores": {
         "task_match_0_2": 0,
         "grounding_0_2": 0,
         "coherence_0_2": 2,
-        "actionability_0_2": 0,
-        "technicality_0_2": 0,
-        "auto_total_0_10": 2,
+        "actionability_0_2": 1,
+        "technicality_0_2": 1,
+        "auto_total_0_10": 4,
         "signals": {
-          "prompt_keyword_overlap_ratio": 0.0,
+          "prompt_keyword_overlap_ratio": 0.0476,
           "trigram_repetition_ratio": 0.0,
           "has_steps": false,
-          "has_code_like_tokens": false,
-          "word_count": 72
+          "has_code_like_tokens": true,
+          "word_count": 79
         }
       },
       "manual_score_template": {
@@ -183,25 +183,25 @@
       "category": "debugging",
       "prompt": "<bos> Question:\nFile Save Error in Jupyter notebook says disk I/O error, but df -h shows free space. Why?\nTags: jupyter linux\n<sep> Answer:\n",
       "prompt_used_for_generation": "<bos> Question:\nFile Save Error in Jupyter notebook says disk I/O error, but df -h shows free space. Why?\nTags: jupyter linux\nAnswer requirements:\n1) Root cause in 1-2 lines.\n2) Concrete fix steps.\n3) Minimal code/example.\n4) Keep answer specific to this question only.\n<sep> Answer:\n",
-      "generated_text_full": "Question: File Save Error in J up y ter not ebook says disk I / O error, but df - h shows free space. Why? Tags: j up y ter linux Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: I think the problem is that you have a memory leak on your system and you are using a lot of memory for it to work properly. You should try to use [ j up y er ](http:// www. j up ys er. org /) instead of [ J up y ler ](http:\\ j up ies er \\ j up ey er). If you want to use a lot more",
-      "generated_answer_only": "I think the problem is that you have a memory leak on your system and you are using a lot of memory for it to work properly. You should try to use [ j up y er ](http:// www. j up ys er. org /) instead of [ J up y ler ](http:\\ j up ies er \\ j up ey er). If you want to use a lot more",
+      "generated_text_full": "Question: File Save Error in J up y ter not ebook says disk I / O error, but df - h shows free space. Why? Tags: j up y ter linux Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: I think you are looking for [ j up y ters ](https:// github. com / J up y ers / j up ies). You can check out the [ j d ks ](https www. j d k ks. org /) repository and see if it works for your needs. If it doesn 't work, then you may need to look into using [ m cs k fs ](https docs. oracle. com /). You will also find some references to j d",
+      "generated_answer_only": "I think you are looking for [ j up y ters ](https:// github. com / J up y ers / j up ies). You can check out the [ j d ks ](https www. j d k ks. org /) repository and see if it works for your needs. If it doesn 't work, then you may need to look into using [ m cs k fs ](https docs. oracle. com /). You will also find some references to j d",
       "prompt_tokens": 86,
-      "generated_tokens": 80,
+      "generated_tokens": 96,
       "ended_with_eos": false,
       "template_noise_flag": false,
       "auto_scores": {
         "task_match_0_2": 0,
         "grounding_0_2": 0,
         "coherence_0_2": 2,
-        "actionability_0_2": 0,
+        "actionability_0_2": 2,
         "technicality_0_2": 0,
-        "auto_total_0_10": 2,
+        "auto_total_0_10": 4,
         "signals": {
           "prompt_keyword_overlap_ratio": 0.0,
           "trigram_repetition_ratio": 0.0,
-          "has_steps": false,
+          "has_steps": true,
           "has_code_like_tokens": false,
-          "word_count": 70
+          "word_count": 81
         }
       },
       "manual_score_template": {
@@ -217,25 +217,25 @@
       "category": "debugging",
       "prompt": "<bos> Question:\nTokenization is slower with 62 workers than with 1 worker using tokenizers encode_batch. Why does this happen?\nTags: python multiprocessing\n<sep> Answer:\n",
       "prompt_used_for_generation": "<bos> Question:\nTokenization is slower with 62 workers than with 1 worker using tokenizers encode_batch. Why does this happen?\nTags: python multiprocessing\nAnswer requirements:\n1) Root cause in 1-2 lines.\n2) Concrete fix steps.\n3) Minimal code/example.\n4) Keep answer specific to this question only.\n<sep> Answer:\n",
-      "generated_text_full": "Question: Token ization is slower with 62 workers than with 1 worker using token izers encode _ batch. Why does this happen? Tags: python multiprocessing Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: I have the same problem and I solved it by adding a line break after each line that is not contained in the text file. This way, the text files are all in one go (and you can 't add more lines). The solution is to use a single line break before each line containing the same number of lines. In my case, the first step is to add the following",
-      "generated_answer_only": "I have the same problem and I solved it by adding a line break after each line that is not contained in the text file. This way, the text files are all in one go (and you can 't add more lines). The solution is to use a single line break before each line containing the same number of lines. In my case, the first step is to add the following",
+      "generated_text_full": "Question: Token ization is slower with 62 workers than with 1 worker using token izers encode _ batch. Why does this happen? Tags: python multiprocessing Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: I think you are looking for [ A WS ](https:// aws. amazon. com / s / v 2 / developer /) which you can use to generate a token token, and then use that token to generate the token. I 'm not sure if it 's more efficient than just generating a token and then using it for the next step. I 've created an A WS account and created an S 3 bucket, and the S 3 will be generated by default. The secret key will",
+      "generated_answer_only": "I think you are looking for [ A WS ](https:// aws. amazon. com / s / v 2 / developer /) which you can use to generate a token token, and then use that token to generate the token. I 'm not sure if it 's more efficient than just generating a token and then using it for the next step. I 've created an A WS account and created an S 3 bucket, and the S 3 will be generated by default. The secret key will",
       "prompt_tokens": 79,
-      "generated_tokens": 80,
+      "generated_tokens": 96,
       "ended_with_eos": false,
       "template_noise_flag": false,
       "auto_scores": {
-        "task_match_0_2": 0,
-        "grounding_0_2": 0,
+        "task_match_0_2": 1,
+        "grounding_0_2": 1,
         "coherence_0_2": 2,
         "actionability_0_2": 2,
         "technicality_0_2": 0,
-        "auto_total_0_10": 4,
+        "auto_total_0_10": 6,
         "signals": {
-          "prompt_keyword_overlap_ratio": 0.05,
+          "prompt_keyword_overlap_ratio": 0.1,
           "trigram_repetition_ratio": 0.0,
           "has_steps": true,
           "has_code_like_tokens": false,
-          "word_count": 71
+          "word_count": 87
         }
       },
       "manual_score_template": {
@@ -251,10 +251,10 @@
       "category": "chat_style",
       "prompt": "<bos> User:\nMy preprocessing pipeline keeps crashing from memory usage. Give me a practical step-by-step fix plan.\nAssistant:\n",
       "prompt_used_for_generation": "<bos> User:\nMy preprocessing pipeline keeps crashing from memory usage. Give me a practical step-by-step fix plan.\nAssistant:\nResponse requirements:\n- Explain root cause first.\n- Give actionable steps.\n- Add one concise code/example block when relevant.\n- Stay specific to the question.\n",
-      "generated_text_full": "User: My pre processing pipeline keeps crashing from memory usage. Give me a practical step - by - step fix plan. Ass ist ant: Response requirements: - Ex plain root cause first. - Give action able steps. - Add one concise code / example block when relevant. - St ay specific to the question. I have been trying to figure out how to get started with this and I am having some issues with it. I am using VS 2010,. NET 4. 0 and. NET 3. 5,. Net 4. 1,. net 3. 6,. dll 2. 0,. win 32,. r pt,. n t if,. w m 2 d,.",
-      "generated_answer_only": "I have been trying to figure out how to get started with this and I am having some issues with it. I am using VS 2010,. NET 4. 0 and. NET 3. 5,. Net 4. 1,. net 3. 6,. dll 2. 0,. win 32,. r pt,. n t if,. w m 2 d,.",
-      "prompt_tokens": 72,
-      "generated_tokens": 80,
+      "generated_text_full": "User: My preprocessing pipeline keeps crashing from memory usage. Give me a practical step - by - step fix plan. Ass istant: Response requirements: - Explain root cause first. - Give action able steps. - Add one concise code / example block when relevant. - St ay specific to the question. I have created a small web application that is using a. NET Web Application, and I need to add some custom code, but it 's not working. Basically, I want to use a framework like. NET Core in my ASP. NET Core 1. 1 app. I don 't know if the framework is able to find the. NET core code or if it 's just not possible to add a new framework, but I 'm unsure of how to go about doing this.",
+      "generated_answer_only": "I have created a small web application that is using a. NET Web Application, and I need to add some custom code, but it 's not working. Basically, I want to use a framework like. NET Core in my ASP. NET Core 1. 1 app. I don 't know if the framework is able to find the. NET core code or if it 's just not possible to add a new framework, but I 'm unsure of how to go about doing this.",
+      "prompt_tokens": 69,
+      "generated_tokens": 96,
       "ended_with_eos": false,
       "template_noise_flag": false,
       "auto_scores": {
@@ -269,7 +269,7 @@
           "trigram_repetition_ratio": 0.0,
           "has_steps": false,
           "has_code_like_tokens": false,
-          "word_count": 53
+          "word_count": 83
         }
       },
       "manual_score_template": {
@@ -285,25 +285,25 @@
       "category": "chat_style",
       "prompt": "<bos> User:\nI trained on 20 shards and quality is weak. Should I change model size, data, or decoding first?\nAssistant:\n",
       "prompt_used_for_generation": "<bos> User:\nI trained on 20 shards and quality is weak. Should I change model size, data, or decoding first?\nAssistant:\nResponse requirements:\n- Explain root cause first.\n- Give actionable steps.\n- Add one concise code/example block when relevant.\n- Stay specific to the question.\n",
-      "generated_text_full": "User: I tr ained on 20 sh ards and quality is weak. Should I change model size, data, or decoding first? Ass ist ant: Response requirements: - Ex plain root cause first. - Give action able steps. - Add one concise code / example block when relevant. - St ay specific to the question. Tags: silverlight, r pc, r pt Answer: The R TP is a good start for the R TP. The R TP does not have any way of knowing how many instances of R TP are running at once. If you want to know what is happening in your R TP, then you can use the R SP 's [ R TP ](http:// r tp. sourceforge",
-      "generated_answer_only": "Tags: silverlight, r pc, r pt Answer: The R TP is a good start for the R TP. The R TP does not have any way of knowing how many instances of R TP are running at once. If you want to know what is happening in your R TP, then you can use the R SP 's [ R TP ](http:// r tp. sourceforge",
-      "prompt_tokens": 74,
-      "generated_tokens": 80,
+      "generated_text_full": "User: I tr ained on 20 sh ards and quality is weak. Should I change model size, data, or decoding first? Ass istant: Response requirements: - Explain root cause first. - Give action able steps. - Add one concise code / example block when relevant. - St ay specific to the question. ``` @ code { @ code { @ code } } ``` { test } @ context var context = Test Context. builder (). build (); // This line is just a test, but the code is not actually working. It does not work when the code changes. You can 't use @ code at all. (This statement is not valid.) - Use @ code instead. (You are right to ignore this statement",
+      "generated_answer_only": "``` @ code { @ code { @ code } } ``` { test } @ context var context = Test Context. builder (). build (); // This line is just a test, but the code is not actually working. It does not work when the code changes. You can 't use @ code at all. (This statement is not valid.) - Use @ code instead. (You are right to ignore this statement",
+      "prompt_tokens": 72,
+      "generated_tokens": 96,
       "ended_with_eos": false,
       "template_noise_flag": false,
       "auto_scores": {
         "task_match_0_2": 0,
         "grounding_0_2": 0,
         "coherence_0_2": 2,
-        "actionability_0_2": 2,
-        "technicality_0_2": 0,
+        "actionability_0_2": 1,
+        "technicality_0_2": 1,
         "auto_total_0_10": 4,
         "signals": {
           "prompt_keyword_overlap_ratio": 0.0,
           "trigram_repetition_ratio": 0.0,
-          "has_steps": true,
-          "has_code_like_tokens": false,
-          "word_count": 65
+          "has_steps": false,
+          "has_code_like_tokens": true,
+          "word_count": 73
         }
       },
       "manual_score_template": {
@@ -319,25 +319,25 @@
       "category": "chat_style",
       "prompt": "<bos> User:\nHow do I structure checkpoints for multiple runs so resume is easy and reproducible?\nAssistant:\n",
       "prompt_used_for_generation": "<bos> User:\nHow do I structure checkpoints for multiple runs so resume is easy and reproducible?\nAssistant:\nResponse requirements:\n- Explain root cause first.\n- Give actionable steps.\n- Add one concise code/example block when relevant.\n- Stay specific to the question.\n",
-      "generated_text_full": "User: How do I structure check points for multiple runs so resume is easy and repro duc ible? Ass ist ant: Response requirements: - Ex plain root cause first. - Give action able steps. - Add one concise code / example block when relevant. - St ay specific to the question. Tags: silverlight, architecture, architecture - management, architecture Answer: I have a similar problem with my application that uses a lot of different types of data. The solution is to use the same type of data for different types. This way you can easily change the type of your application by using the same name as your application. You will need to create a new instance of",
-      "generated_answer_only": "Tags: silverlight, architecture, architecture - management, architecture Answer: I have a similar problem with my application that uses a lot of different types of data. The solution is to use the same type of data for different types. This way you can easily change the type of your application by using the same name as your application. You will need to create a new instance of",
-      "prompt_tokens": 68,
-      "generated_tokens": 80,
+      "generated_text_full": "User: How do I structure check points for multiple runs so resume is easy and repro ducible? Ass istant: Response requirements: - Explain root cause first. - Give action able steps. - Add one concise code / example block when relevant. - St ay specific to the question. - Create a new project. Tags: c #, visual - studio, visual - c ++,. net - 5, visual studio - 20 17, windows - store - apps Answer: I 'm not sure if you can find an answer to this, but here 's how I would start with it. The idea is that you create a new ` Project ` and then add a new to it. First add the to your ` Project `: ```",
+      "generated_answer_only": "- Create a new project. Tags: c #, visual - studio, visual - c ++,. net - 5, visual studio - 20 17, windows - store - apps Answer: I 'm not sure if you can find an answer to this, but here 's how I would start with it. The idea is that you create a new ` Project ` and then add a new to it. First add the to your ` Project `: ```",
+      "prompt_tokens": 65,
+      "generated_tokens": 96,
       "ended_with_eos": false,
       "template_noise_flag": false,
       "auto_scores": {
-        "task_match_0_2": 0,
-        "grounding_0_2": 0,
+        "task_match_0_2": 2,
+        "grounding_0_2": 1,
         "coherence_0_2": 2,
-        "actionability_0_2": 0,
-        "technicality_0_2": 0,
-        "auto_total_0_10": 2,
+        "actionability_0_2": 2,
+        "technicality_0_2": 2,
+        "auto_total_0_10": 9,
         "signals": {
-          "prompt_keyword_overlap_ratio": 0.0769,
+          "prompt_keyword_overlap_ratio": 0.1538,
           "trigram_repetition_ratio": 0.0,
-          "has_steps": false,
-          "has_code_like_tokens": false,
-          "word_count": 66
+          "has_steps": true,
+          "has_code_like_tokens": true,
+          "word_count": 77
         }
       },
       "manual_score_template": {
@@ -353,25 +353,25 @@
       "category": "code_help",
       "prompt": "<bos> Question:\nWrite a Python function that safely converts input that may be str, list, bytes, dict, or None into clean text.\nTags: python\n<sep> Answer:\n",
       "prompt_used_for_generation": "<bos> Question:\nWrite a Python function that safely converts input that may be str, list, bytes, dict, or None into clean text.\nTags: python\nAnswer requirements:\n1) Root cause in 1-2 lines.\n2) Concrete fix steps.\n3) Minimal code/example.\n4) Keep answer specific to this question only.\n<sep> Answer:\n",
-      "generated_text_full": "Question: Write a Python function that safely converts input that may be str, list, bytes, dict, or None into clean text. Tags: python Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: I think you should read the comments on the topic and see if it helps. I 'm not sure what you are trying to do with your code but I can 't find any documentation about how to get started. If you want to know more about how you are doing things, please let me know!:)",
-      "generated_answer_only": "I think you should read the comments on the topic and see if it helps. I 'm not sure what you are trying to do with your code but I can 't find any documentation about how to get started. If you want to know more about how you are doing things, please let me know!:)",
+      "generated_text_full": "Question: Write a Python function that safely converts input that may be str, list, bytes, dict, or None into clean text. Tags: python Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: I 'm not sure how you would solve the problem but I 'll try to make it more clear. You can easily solve the issue by just using a single line of code (which is probably what you 're trying to solve). For example, if you have a string which looks like this: ` hello world ` and you want to convert it to a string, you could do something like this (for example): ``` import re text = ' Hello World ' #",
+      "generated_answer_only": "I 'm not sure how you would solve the problem but I 'll try to make it more clear. You can easily solve the issue by just using a single line of code (which is probably what you 're trying to solve). For example, if you have a string which looks like this: ` hello world ` and you want to convert it to a string, you could do something like this (for example): ``` import re text = ' Hello World ' #",
       "prompt_tokens": 80,
-      "generated_tokens": 65,
-      "ended_with_eos": true,
+      "generated_tokens": 96,
+      "ended_with_eos": false,
       "template_noise_flag": false,
       "auto_scores": {
         "task_match_0_2": 0,
         "grounding_0_2": 0,
         "coherence_0_2": 2,
-        "actionability_0_2": 0,
-        "technicality_0_2": 0,
-        "auto_total_0_10": 2,
+        "actionability_0_2": 1,
+        "technicality_0_2": 1,
+        "auto_total_0_10": 4,
         "signals": {
-          "prompt_keyword_overlap_ratio": 0.0,
+          "prompt_keyword_overlap_ratio": 0.0476,
           "trigram_repetition_ratio": 0.0,
           "has_steps": false,
-          "has_code_like_tokens": false,
-          "word_count": 56
+          "has_code_like_tokens": true,
+          "word_count": 84
         }
       },
       "manual_score_template": {
@@ -387,12 +387,12 @@
       "category": "code_help",
       "prompt": "<bos> Question:\nHow to implement no-repeat-ngram decoding for autoregressive generation in Python pseudocode?\nTags: nlp decoding\n<sep> Answer:\n",
       "prompt_used_for_generation": "<bos> Question:\nHow to implement no-repeat-ngram decoding for autoregressive generation in Python pseudocode?\nTags: nlp decoding\nAnswer requirements:\n1) Root cause in 1-2 lines.\n2) Concrete fix steps.\n3) Minimal code/example.\n4) Keep answer specific to this question only.\n<sep> Answer:\n",
-      "generated_text_full": "Question: How to implement no - repeat - n gram decoding for aut ore gress ive generation in Python pseudocode? Tags: n lp decoding Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: I had the same problem and it was solved by using a single line of code (which is not what you want). I 'm sure that this is an old thread, but I 'm still trying to find a way to solve it. Here 's my solution: ``` def main (argv): # Create a new list of all possible combinations of possible combinations. The",
-      "generated_answer_only": "I had the same problem and it was solved by using a single line of code (which is not what you want). I 'm sure that this is an old thread, but I 'm still trying to find a way to solve it. Here 's my solution: ``` def main (argv): # Create a new list of all possible combinations of possible combinations. The",
-      "prompt_tokens": 77,
-      "generated_tokens": 80,
+      "generated_text_full": "Question: How to implement no - repeat - n gram decoding for autore gress ive generation in Python pseudocode? Tags: nlp decoding Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: This is a [ bug ](https:// github. com / microsoft / dotnet / issues / 10 66 13). You can make it work by adding the following line to your project 's root. The issue is that you are not using. NET 6 or newer versions of. NET Core 3. 5, so you will need to add the following lines to your solution. ``` < Target Name =\" Auto Generate \" Include =\" Microsoft. AspNet Core. Mvc \" />",
+      "generated_answer_only": "This is a [ bug ](https:// github. com / microsoft / dotnet / issues / 10 66 13). You can make it work by adding the following line to your project 's root. The issue is that you are not using. NET 6 or newer versions of. NET Core 3. 5, so you will need to add the following lines to your solution. ``` < Target Name =\" Auto Generate \" Include =\" Microsoft. AspNet Core. Mvc \" />",
+      "prompt_tokens": 75,
+      "generated_tokens": 96,
       "ended_with_eos": false,
-      "template_noise_flag": false,
+      "template_noise_flag": true,
       "auto_scores": {
         "task_match_0_2": 0,
         "grounding_0_2": 0,
@@ -405,7 +405,7 @@
           "trigram_repetition_ratio": 0.0,
           "has_steps": false,
           "has_code_like_tokens": true,
-          "word_count": 64
+          "word_count": 79
         }
       },
       "manual_score_template": {
@@ -421,25 +421,25 @@
       "category": "code_help",
       "prompt": "<bos> Question:\nGive a minimal checklist to verify JAX is actually using 2 GPUs with pmap.\nTags: jax cuda\n<sep> Answer:\n",
       "prompt_used_for_generation": "<bos> Question:\nGive a minimal checklist to verify JAX is actually using 2 GPUs with pmap.\nTags: jax cuda\nAnswer requirements:\n1) Root cause in 1-2 lines.\n2) Concrete fix steps.\n3) Minimal code/example.\n4) Keep answer specific to this question only.\n<sep> Answer:\n",
-      "generated_text_full": "Question: G ive a minimal check list to verify JAX is actually using 2 GPU s with p map. Tags: jax cuda Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: I have the same problem, but I 'm not sure if it 's related to your situation. Here are some of the steps that I 've found so far: 1. Create a new project and add the following line to the top of the file: < Project Name =\" My Project \"> < Target Name =\" my project \" /> </ Project > 2. Add the following",
-      "generated_answer_only": "I have the same problem, but I 'm not sure if it 's related to your situation. Here are some of the steps that I 've found so far: 1. Create a new project and add the following line to the top of the file: < Project Name =\" My Project \"> < Target Name =\" my project \" /> </ Project > 2. Add the following",
+      "generated_text_full": "Question: G ive a minimal check list to verify JAX is actually using 2 GPU s with p map. Tags: jax cuda Answer requirements: 1) Root cause in 1 - 2 lines. 2) Concrete fix steps. 3) Min imal code / example. 4) Keep answer specific to this question only. Answer: The ` Root ` is not the root of the ` Root `. It 's a \" root \" of the root, and it doesn 't have any other parent (e. g., ` Root `) or a \" parent \". That 's why you 're seeing this. You can see that there are no \" children \" in the tree, and that 's why the code you 've provided to that node is not actually doing anything else. The ` Root `' s parent is a child of its",
+      "generated_answer_only": "The ` Root ` is not the root of the ` Root `. It 's a \" root \" of the root, and it doesn 't have any other parent (e. g., ` Root `) or a \" parent \". That 's why you 're seeing this. You can see that there are no \" children \" in the tree, and that 's why the code you 've provided to that node is not actually doing anything else. The ` Root `' s parent is a child of its",
       "prompt_tokens": 75,
-      "generated_tokens": 80,
+      "generated_tokens": 96,
       "ended_with_eos": false,
       "template_noise_flag": false,
       "auto_scores": {
         "task_match_0_2": 0,
         "grounding_0_2": 0,
         "coherence_0_2": 2,
-        "actionability_0_2": 2,
+        "actionability_0_2": 0,
         "technicality_0_2": 0,
-        "auto_total_0_10": 4,
+        "auto_total_0_10": 2,
         "signals": {
-          "prompt_keyword_overlap_ratio": 0.0,
+          "prompt_keyword_overlap_ratio": 0.0625,
           "trigram_repetition_ratio": 0.0,
-          "has_steps": true,
+          "has_steps": false,
           "has_code_like_tokens": false,
-          "word_count": 67
+          "word_count": 89
         }
       },
       "manual_score_template": {
